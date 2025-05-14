@@ -1,66 +1,42 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-
-const signupSchema = z.object({
-  username: z.string().min(3),
-  email:    z.string().email(),
-  password: z.string().min(6),
-});
+import { Button } from '../components/ui/button';
+import { LoginForm } from "../components/LoginForm"
+import { SignupForm } from '../components/SignupForm';
 
 export default function SignupPage() {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors, isSubmitting } } =
-    useForm({ resolver: zodResolver(signupSchema) });
-
-  const onSubmit = async (data) => {
-    try {
-      const resp = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/user/signup`,
-        data
-      );
-      localStorage.setItem('token', resp.data.token);
-      navigate('/gallery');
-    } catch (err) {
-      alert(err.response?.data?.message || 'Signup failed');
-    }
-  };
+  const imageURL =
+    'https://ik.imagekit.io/yhbarve/p-home-3.jpg?updatedAt=1747250742152';
 
   return (
-    <>
+    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-900 to-blue-900">
       <Navbar />
-      <div className='flex max-w-xl mx-auto justify-center'>
-        <div className="p-4 bg-white rounded shadow mt-24">
-          <h1 className="text-xl mb-4">Sign Up</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              <label>Username</label>
-              <input {...register('username')} className="w-full border p-2" />
-              {errors.username && <p className="text-red-500">{errors.username.message}</p>}
-            </div>
-            <div>
-              <label>Email</label>
-              <input {...register('email')} type="email" className="w-full border p-2" />
-              {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-            </div>
-            <div>
-              <label>Password</label>
-              <input {...register('password')} type="password" className="w-full border p-2" />
-              {errors.password && <p className="text-red-500">{errors.password.message}</p>}
-            </div>
-            <button disabled={isSubmitting} className="w-full bg-blue-500 text-white p-2 rounded">
-              {isSubmitting ? 'Signing up…' : 'Sign Up'}
-            </button>
-          </form>
-          <p className="mt-4 text-sm">
-            Already have an account? <Link to="/login" className="text-blue-500">Log in</Link>
-          </p>
+
+      <div className="flex-1 flex">
+        {/* Left pane: image */}
+        <div className="w-2/3">
+          <img className='h-screen w-full object-cover' src={imageURL} alt="" srcset="" />
+        </div>
+
+        {/* Right pane: buttons */}
+        <div className="w-1/3 flex flex-col items-center justify-center bg-gradient-to-tr from-green-950 via-slate-950 to-black border-l-8 border-black">
+          <div className='text-white text-2xl font-light'>Welcome to Portolio!</div>
+          <Page />
         </div>
       </div>
-    </>
+    </div>
   );
 }
+
+function Page() {
+  return (
+    <div className="flex w-full items-center justify-center md:p-10">
+      <div className="">
+        <SignupForm />
+      </div>
+    </div>
+  )
+}
+

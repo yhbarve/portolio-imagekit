@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
 
 export default function Navbar() {
   const [user, setUser] = useState("");
@@ -52,30 +54,62 @@ export default function Navbar() {
       navigate('/gallery');
     }
   }
-
   return (
-    <div className='flex bg-black text-white text-xl p-2 py-6 justify-around items-center'>
-        <button className='text-3xl' onClick={handleTitle}>Portafolio</button>
-        {user !== "" && (
-          <div className='flex gap-4'>
-            <div className='rounded px-1'>{user}</div>
-            {window.location.pathname == '/upload' && (
-              <button className='pr-4 border-b hover:bg-white hover:text-black transition' onClick={handleGallery}>Gallery</button>
+    // outer fixed wrapper to float the bar
+    <div className="fixed top-4 inset-x-4 z-50">
+      {/* inner pill-shaped bar */}
+      <div className="
+        bg-white/10
+        shadow-lg
+        rounded-full
+        px-6 py-3
+        flex justify-between items-center
+        text-gray-800 text-lg
+        backdrop-blur-xl
+      ">
+        {/* Left: logo/title */}
+        <button className="text-2xl font-light text-white" onClick={handleTitle}>
+          Portolio
+        </button>
+  
+        {/* Right: user actions */}
+        {user ? (
+          <div className="flex items-center gap-4">
+            <Badge className="bg-blue-100 text-blue-800">{user}</Badge>
+  
+            {location.pathname === '/upload' && (
+              <button
+                className="px-3 py-1 hover:bg-gray-100 rounded-full transition"
+                onClick={handleGallery}
+              >
+                Gallery
+              </button>
             )}
-            {window.location.pathname == '/gallery' && (
-              <button className='pr-4 border-b hover:bg-white hover:text-black transition' onClick={handleUpload}>Upload</button>
+  
+            {location.pathname === '/gallery' && (
+              <Button variant="outline" className="rounded-full">
+                Upload
+              </Button>
             )}
-            <button className='pr-4 border-b border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition' onClick={handleLogout}>Logout</button>
+  
+            <Button variant="ghost" className="rounded-full" onClick={handleLogout}>
+              Logout
+            </Button>
+          </div>
+        ) : (
+          <div className="flex gap-4">
+            <Button variant="ghost" className="rounded-full" onClick={handleSignup}>
+              About Portolio
+            </Button>
+            <Button variant="ghost" className="rounded-full" onClick={handleSignup}>
+              Signup
+            </Button>
+            <Button variant="ghost" className="rounded-full" onClick={handleLogin}>
+              Login
+            </Button>
           </div>
         )}
-        {
-          user == "" && (
-            <div className='flex gap-4'>
-              <button className='bg-white text-black px-1 rounded' onClick={handleSignup}>Signup</button>
-              <button className='bg-white text-black px-1 rounded' onClick={handleLogin}>Login</button>
-            </div>
-          )
-        }
+      </div>
     </div>
-  )
+  );  
 }
