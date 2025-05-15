@@ -1,27 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { z } from 'zod';
-import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "./ui/card";
-import { Label } from "./ui/label";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 
-export function LoginForm({ className, ...props }) {
+export default function LoginForm(props) {
   const navigate = useNavigate();
+
+  // 1) Define your Zod schema
   const loginSchema = z.object({
-    email:    z.string().email(),
-    password: z.string().min(6),
+    email:    z.string().email("Must be a valid email"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
   });
+
+  // 2) Hook up React Hook Form with Zod
   const {
     register,
     handleSubmit,
@@ -30,6 +23,7 @@ export function LoginForm({ className, ...props }) {
     resolver: zodResolver(loginSchema),
   });
 
+  // 3) onSubmit handler
   const onSubmit = async (data) => {
     try {
       const resp = await axios.post(
@@ -44,70 +38,73 @@ export function LoginForm({ className, ...props }) {
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
+    <div
+      className="flex w-full max-w-sm items-center justify-center md:p-5
+                 bg-white/10 shadow-lg rounded-xl backdrop-blur-xl text-white"
+      {...props}
+    >
+      {/* 4) Turn your inner wrapper into a form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
+        <div className="mb-3 pb-3 border-b border-gray-600">
+          <h1 className="text-xl font-light mb-1">Login</h1>
+          <p className="text-sm text-gray-400">
             Enter your credentials to access your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  {...register("email")}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message}</p>
-                )}
-              </div>
+          </p>
+        </div>
 
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  {...register("password")}
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-sm">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="email" className="text-sm font-light">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            placeholder="charles@cl16.com"
+            className="rounded text-sm p-2 bg-white/10 backdrop-blur-xl"
+            {...register("email")}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-xs">{errors.email.message}</p>
+          )}
+        </div>
 
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Logging in..." : "Login"}
-              </Button>
-            </div>
+        <div className="flex flex-col gap-2 border-b mb-6 pb-6 border-gray-600">
+          <label htmlFor="password" className="text-sm font-light">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            className="rounded text-sm p-2 bg-white/10 backdrop-blur-xl"
+            {...register("password")}
+          />
+          {errors.password && (
+            <p className="text-red-500 text-xs">{errors.password.message}</p>
+          )}
+        </div>
 
-            <div className="mt-4 text-center text-sm">
-              Don’t have an account?{" "}
-              <button
-                type="button"
-                className="underline underline-offset-4"
-                onClick={() => navigate("/signup")}
-              >
-                Sign up
-              </button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50
+                     text-white p-2 rounded text-sm font-medium mb-3"
+        >
+          {isSubmitting ? "Logging in…" : "Login"}
+        </button>
+
+        <p className="text-sm text-gray-300 text-center">
+          Don’t have an account?{" "}
+          <button
+            type="button"
+            className="underline hover:text-white"
+            onClick={() => navigate("/signup")}
+          >
+            Sign up
+          </button>
+        </p>
+      </form>
     </div>
   );
 }
+
