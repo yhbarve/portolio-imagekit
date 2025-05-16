@@ -11,7 +11,6 @@ export default function SignupPage() {
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-slate-900 to-blue-900">
       <Navbar />
-
       <div className="flex-1 flex">
         {/* Left pane: image */}
         <div className="w-2/3">

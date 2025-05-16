@@ -52,7 +52,7 @@ export default function SignupForm(props) {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col w-full"
       >
-        <div className="mb-3 pb-3 border-b border-gray-600">
+        <div className="mb-6 pb-6 border-b border-gray-600">
           <h1 className="text-xl font-light mb-1">Signup</h1>
           <h3 className="text-sm text-gray-400">
             Create your account by filling in the fields

@@ -45,14 +45,14 @@ export default function LoginForm(props) {
     >
       {/* 4) Turn your inner wrapper into a form */}
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
-        <div className="mb-3 pb-3 border-b border-gray-600">
+        <div className="mb-6 pb-6 border-b border-gray-600">
           <h1 className="text-xl font-light mb-1">Login</h1>
           <p className="text-sm text-gray-400">
             Enter your credentials to access your account
           </p>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mb-4">
           <label htmlFor="email" className="text-sm font-light">
             Email
           </label>
