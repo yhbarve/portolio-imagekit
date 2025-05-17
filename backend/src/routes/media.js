@@ -10,7 +10,7 @@ const mediaRouter = express.Router();
 const imagekit = new ImageKit({
   publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
-  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
+  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
 });
 
 // GET /media/upload/signature
@@ -20,50 +20,57 @@ mediaRouter.get("/upload/signature", (req, res) => {
   res.json(authParams);
 });
 
-mediaRouter.post('/', authMiddleware, async (req, res, next) => {
-    try {
-        const fileName = req.body.fileName;
-        const fileType = req.body.fileType;
-        const url = req.body.url;
+mediaRouter.post("/", authMiddleware, async (req, res, next) => {
+  try {
+    const fileName = req.body.fileName;
+    const fileType = req.body.fileType;
+    const url = req.body.url;
 
-        if (fileType !== 'image') {
-          return res.status(400).json({ message: 'Only image uploads are supported.' });
-        }
-
-        const existingFile = await Media.findOne({url});
-
-        if (existingFile) {
-          res.status(201).json({
-            msg: "file already exists"
-          })
-          return;
-        }
-
-        const media = Media.create({
-            fileName,
-            fileType,
-            url,
-            owner: req.userId
-        });
-        res.status(201).json({
-            media
-        });
-    } catch (err) {
-        next(err);
+    if (fileType !== "image") {
+      return res
+        .status(400)
+        .json({ message: "Only image uploads are supported." });
     }
+
+    const existingFile = await Media.findOne({ url });
+
+    if (existingFile) {
+      res.status(201).json({
+        msg: "file already exists",
+      });
+      return;
+    }
+
+    const media = Media.create({
+      fileName,
+      fileType,
+      url,
+      owner: req.userId,
+    });
+    res.status(201).json({
+      media,
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
-mediaRouter.get(
-    '/',
-    authMiddleware,
-    async (req, res, next) => {
-      try {
-        const items = await Media.find({ owner: req.userId });
-        res.json(items);
-      } catch (err) {
-        next(err);
-      }
-    }
-  );
+mediaRouter.get("/private", authMiddleware, async (req, res, next) => {
+  try {
+    const items = await Media.find({ owner: req.userId });
+    res.json(items);
+  } catch (err) {
+    next(err);
+  }
+});
+
+mediaRouter.get("/public", async (req, res, next) => {
+  try {
+    const items = await Media.find({ makePublic: true });
+    res.json(items);
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = mediaRouter;

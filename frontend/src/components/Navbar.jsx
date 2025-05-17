@@ -75,7 +75,7 @@ export default function Navbar() {
         {/* Right: user actions */}
         {user ? (
           <div className="flex items-center gap-4">
-            <Badge className="bg-blue-100 text-blue-800">{user}</Badge>
+            <Badge className="bg-blue-100 text-blue-800 cursor-default">{user}</Badge>
   
             {location.pathname === '/upload' && (
               <button
@@ -87,12 +87,12 @@ export default function Navbar() {
             )}
   
             {location.pathname === '/gallery' && (
-              <Button variant="outline" className="rounded-full">
+              <Button onClick={() => navigate('/upload')} variant="outline" className="rounded-full">
                 Upload
               </Button>
             )}
   
-            <Button variant="ghost" className="rounded-full" onClick={handleLogout}>
+            <Button variant="destructive" className="rounded-full" onClick={handleLogout}>
               Logout
             </Button>
           </div>
