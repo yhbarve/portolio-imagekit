@@ -1,115 +1,133 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 
 export default function Navbar() {
   const [user, setUser] = useState("");
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const location = useLocation();
 
-  async function getUser(){
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-    if (!response){
-      console.error("No user found");
-      alert("Please login again");
-      navigate('/login');
-      return;
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchUser() {
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/user/me`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if (isMounted) setUser(data.username);
+      } catch {
+        if (isMounted) {
+          setUser(null);
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
     }
-    setUser(response.data.username);
-    console.log(response.data);
-  }
-
-  if (token){
-    getUser();
-  }
-
-  function handleLogout(){
-    setUser("");
-    localStorage.removeItem('token');
-    navigate('/home');
-  }
-
-  function handleLogin(){
-    navigate('/login');
-  }
-
-  function handleSignup(){
-    navigate('/signup');
-  }
-
-  function handleGallery(){
-    navigate('/gallery');
-  }
-
-  function handleUpload(){
-    navigate('/upload');
-  }
-
-  function handleTitle(){
-    if (user === ""){
-      navigate('/');
+    if (token) {
+      fetchUser();
     } else {
-      navigate('/gallery');
+      setUser(null);
     }
-  }
+    return () => {
+      isMounted = false;
+    };
+  }, [token, navigate]);
+
+  const handleLogout = () => {
+    setUser("");
+    localStorage.removeItem("token");
+    navigate("/home");
+  };
+  const handleLogin = () => navigate("/login");
+  const handleSignup = () => navigate("/signup");
+  const handleGallery = () => navigate("/gallery");
+  const handleUpload = () => navigate("/upload");
+  const handleTitle = () => navigate(user ? "/gallery" : "/");
+
   return (
-    // outer fixed wrapper to float the bar
-    <div className="fixed top-4 inset-x-4 z-50">
-      {/* inner pill-shaped bar */}
-      <div className="
-        bg-white/10
-        shadow-lg
-        rounded-full
-        px-6 py-3
-        flex justify-between items-center
-        text-gray-800 text-lg
-        backdrop-blur-xl
-      ">
-        {/* Left: logo/title */}
-        <button className="text-2xl font-light text-white" onClick={handleTitle}>
+    <div className="fixed top-2 inset-x-2 sm:top-4 sm:inset-x-4 z-50">
+      <div
+        className="
+          bg-white/10 backdrop-blur-xl shadow-lg rounded-full
+          px-4 py-2 sm:px-6 sm:py-4
+          flex flex-col sm:flex-row
+          justify-between items-center
+          gap-3 text-white text-base sm:text-lg
+        "
+      >
+        <button
+          className="text-2xl md:text-3xl font-light"
+          onClick={handleTitle}
+        >
           Portolio
         </button>
-  
-        {/* Right: user actions */}
-        {user ? (
-          <div className="flex items-center gap-4">
-            <Badge className="bg-blue-100 text-blue-800 cursor-default">{user}</Badge>
-  
-            {location.pathname === '/upload' && (
-              <button
-                className="px-3 py-1 hover:bg-gray-100 rounded-full transition"
-                onClick={handleGallery}
+
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center">
+          {user ? (
+            <>
+              <Badge className="bg-blue-100 text-blue-800 cursor-default">
+                {user}
+              </Badge>
+
+              {location.pathname === "/upload" && (
+                <Button
+                  variant="outline"
+                  onClick={handleGallery}
+                  className="rounded-full text-sm sm:text-base text-black"
+                >
+                  Gallery
+                </Button>
+              )}
+
+              {location.pathname === "/gallery" && (
+                <Button
+                  variant="outline"
+                  onClick={handleUpload}
+                  className="rounded-full text-sm sm:text-base text-black"
+                >
+                  Upload
+                </Button>
+              )}
+
+              <Button
+                variant="destructive"
+                onClick={handleLogout}
+                className="rounded-full text-sm sm:text-base"
               >
-                Gallery
-              </button>
-            )}
-  
-            {location.pathname === '/gallery' && (
-              <Button onClick={() => navigate('/upload')} variant="outline" className="rounded-full">
-                Upload
+                Logout
               </Button>
-            )}
-  
-            <Button variant="destructive" className="rounded-full" onClick={handleLogout}>
-              Logout
-            </Button>
-          </div>
-        ) : (
-          <div className="flex gap-4">
-            <Button variant="ghost" className="rounded-full" onClick={handleSignup}>
-              About Portolio
-            </Button>
-            <Button variant="ghost" className="rounded-full" onClick={handleSignup}>
-              Signup
-            </Button>
-            <Button variant="ghost" className="rounded-full" onClick={handleLogin}>
-              Login
-            </Button>
-          </div>
-        )}
+            </>
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                onClick={handleSignup}
+                className="rounded-full text-sm sm:text-base text-black"
+              >
+                About
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleSignup}
+                className="rounded-full text-sm sm:text-base text-black"
+              >
+                Signup
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleLogin}
+                className="rounded-full text-sm sm:text-base text-black"
+              >
+                Login
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </div>
-  );  
+  );
 }

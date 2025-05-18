@@ -44,7 +44,7 @@ export default function SignupForm(props) {
 
   return (
     <div
-      className="flex w-full max-w-sm items-start justify-center md:p-5
+      className="flex max-w-sm xl:w-full items-start justify-center p-4 lg:p-5
                  bg-white/10 shadow-lg rounded-xl backdrop-blur-xl text-white"
       {...props}
     >

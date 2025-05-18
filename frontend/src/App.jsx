@@ -5,6 +5,7 @@ import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import UploadPage from './pages/UploadPage';
 import GalleryPage from './pages/GalleryPage';
+import Footer from './components/Footer';
 
 export default function App() {
 
@@ -35,6 +36,7 @@ export default function App() {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+      <Footer />
     </div>
   );
 }

@@ -8,6 +8,7 @@ const mediaSchema = new Schema({
   owner:     { type: Schema.Types.ObjectId, ref: "User", required: true },
   createdAt: { type: Date, default: Date.now },
   makePublic: { type: Boolean, default: false, required: false},
+  caption: {type: String, default: '', required: false},
 });
 
 const Media = mongoose.model("Media", mediaSchema);

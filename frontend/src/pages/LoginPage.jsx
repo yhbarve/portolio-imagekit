@@ -18,7 +18,7 @@ export default function HomePage() {
 
       <div className="flex-1 flex h-full">
         {/* Left pane: image */}
-        <div className="w-2/3">
+        <div className="w-2/3 hidden lg:block">
           <img
             className="h-full w-full object-cover"
             src={imageURL}
@@ -27,7 +27,7 @@ export default function HomePage() {
         </div>
 
         {/* Right pane: buttons */}
-        <div className="w-1/3 flex flex-col items-center justify-start pt-64 bg-gradient-to-tr from-green-950 via-slate-950 to-black border-l-8 border-black gap-8">
+        <div className="w-full lg:w-1/3 flex flex-col items-center justify-start pt-64 bg-gradient-to-tr from-green-950 via-slate-950 to-black md:border-l-8 md:border-black gap-8">
           <div className="text-white text-2xl font-light">
             Welcome back to Portolio!
           </div>
