@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import UploadPage from './pages/UploadPage';
 import GalleryPage from './pages/GalleryPage';
 import Footer from './components/Footer';
+import AboutPage from './pages/AboutPage';
 
 export default function App() {
 
@@ -22,6 +23,7 @@ export default function App() {
         <Route path='/home' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/about' element={<AboutPage />} />
 
         {/* Protected */}
         <Route

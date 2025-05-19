@@ -52,11 +52,11 @@ export default function UploadPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex flex-col lg:flex-row bg-gradient-to-br from-slate-900 via-green-950 to-blue-900">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-green-950 to-blue-900">
         {/* Form pane */}
-        <div className="w-full lg:w-1/3 flex flex-col items-center justify-center pt-32 p-4 lg:p-8">
+        <div className="w-full flex flex-col items-center justify-center mt-32 p-4">
           <div className="text-xl font-light mb-4 text-white">Upload Image</div>
-          <div className="w-full max-w-lg bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg p-4 flex flex-col gap-6">
+          <div className="max-w-lg bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg p-4 flex flex-col gap-6">
             <MediaUpload onUpload={handleUploadMeta} />
 
             <div className="flex flex-col gap-1">
@@ -93,15 +93,6 @@ export default function UploadPage() {
               {media ? "Upload to Gallery" : "Select an Image First"}
             </Button>
           </div>
-        </div>
-
-        {/* Preview pane (hidden on small screens) */}
-        <div className="hidden lg:block lg:h-screen lg:object-cover lg:w-full">
-          <img
-            src={media?.url || placeholderURL}
-            alt="Preview"
-            className="w-full h-full object-cover"
-          />
         </div>
       </div>
     </>

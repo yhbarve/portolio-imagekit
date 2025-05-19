@@ -39,7 +39,7 @@ export default function LoginForm(props) {
 
   return (
     <div
-      className="flex max-w-sm xl:w-full items-center justify-center p-4 lg:p-5
+      className="flex max-w-sm w-full lg:w-auto xl:w-full items-center justify-center p-4 lg:p-5
                  bg-white/10 shadow-lg rounded-xl backdrop-blur-xl text-white"
       {...props}
     >
