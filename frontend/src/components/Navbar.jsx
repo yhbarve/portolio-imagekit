@@ -46,6 +46,7 @@ export default function Navbar() {
   const handleSignup = () => navigate("/signup");
   const handleGallery = () => navigate("/gallery");
   const handleUpload = () => navigate("/upload");
+  const handleAbout = () => navigate("/about");
   const handleTitle = () => navigate(user ? "/gallery" : "/");
 
   return (
@@ -105,7 +106,7 @@ export default function Navbar() {
             <>
               <Button
                 variant="outline"
-                onClick={handleSignup}
+                onClick={handleAbout}
                 className="rounded-full text-sm sm:text-base text-black"
               >
                 About
